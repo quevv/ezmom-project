@@ -3,7 +3,7 @@ import { Cookie } from 'next/font/google';
 
 const Footer = () => {
   return (
-    <div className="w-full grid grid-cols-3 gap-3 bg-[#FA5A96] py-10 px-20 text-white">
+    <footer className="w-full grid grid-cols-3 gap-3 bg-[#FA5A96] py-10 px-20 text-white">
       <div>
         <div className="text-4xl font-[UTM-Cookie] font-extrabold py-2"><a href='/'>EZMOM Baby</a></div>
         <div>Email: ezmombaby@gmail.com</div>
@@ -28,7 +28,7 @@ const Footer = () => {
           <li><a href='/#'>Bảo hành & Bảo trì</a></li>
         </ul>
       </div>
-    </div>
+    </footer>
   )
 }
 

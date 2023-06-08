@@ -18,7 +18,11 @@
 
 body {
   color: #000000;
-  background: #F5F5F5;
+  background: #f6eeee;
+}
+
+html {
+  font-family: 'Montserrat', sans-serif;
 }
 
 @layer base {
@@ -29,3 +33,21 @@ body {
     font-style: normal;
   }
 }
+
+.ant-drawer .ant-drawer-conten{
+  background-color: #f6eeee;
+}
+
+.ant-drawer .ant-drawer-content-wrapper{
+  width: 1000px !important;
+}
+
+.ant-drawer .ant-drawer-wrapper-body{
+  background-color: #f6eeee;
+}
+
+del {
+  text-decoration: line-through;
+  color: gray;
+}
+

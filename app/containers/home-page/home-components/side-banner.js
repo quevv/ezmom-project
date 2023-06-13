@@ -44,7 +44,7 @@ const SideBanner = () => {
         </div>
       </div>
       <div className={fixed ? 'absolute right-44' : 'absolute right-24'}>
-        <div className={fixed ? 'fixed top-[20%]' : ''}>Right side</div>
+        <div className={fixed ? 'fixed top-[20%]' : ''}></div>
       </div>
     </div>
   )

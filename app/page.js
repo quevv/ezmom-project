@@ -1,11 +1,10 @@
-'use client'
-import Head from 'next/head'
+"use client"
 import HomePage from './containers/home-page/home.container'
 
 export default function Home() {
   return (
-    <>
-      <HomePage />
-    </>
+    <main>
+      <HomePage/>
+    </main>
   )
 }

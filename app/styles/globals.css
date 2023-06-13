@@ -26,9 +26,12 @@ html {
 }
 
 @layer base {
+  .font-outline-1 {
+    -webkit-text-stroke: 0.1px rgb(42, 42, 42);
+  }
   @font-face {
-    font-family: "UTM-Cookie";
-    src: url('../../public/fonts/00067-UTM-Cookies.ttf');
+    font-family: "Pony";
+    src: url('../../public/fonts/Pony.ttf');
     font-weight: normal;
     font-style: normal;
   }

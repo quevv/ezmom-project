@@ -1,8 +1,9 @@
+"use client"
 import React, { useState } from 'react'
 import { Drawer } from 'antd'
 import { SearchOutlined } from '@ant-design/icons'
 import Link from 'next/link'
-import ProductCard from '@/app/components/ProductCard'
+import ProductCard from '@/components/ProductCard'
 
 const FlashSaleDrawer = (data) => {
   const productList = data.data

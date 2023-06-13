@@ -1,11 +1,12 @@
+"use client"
 import Image from 'next/image'
 import React, { useState } from 'react'
-import EzMomLogo from '../../public/images/ezmom_logo.svg'
-import CateLogo from '../../public/images/category_logo.svg'
-import HeartLogo from '../../public/images/heart_logo.svg'
-import ChatLogo from '../../public/images/chat_logo.svg'
-import CartLogo from '../../public/images/shopping_cart_logo.svg'
-import UserLogo from '../../public/images/user_logo.svg'
+import EzMomLogo from '../public/images/ezmom_logo.svg'
+import CateLogo from '../public/images/category_logo.svg'
+import HeartLogo from '../public/images/heart_logo.svg'
+import ChatLogo from '../public/images/chat_logo.svg'
+import CartLogo from '../public/images/shopping_cart_logo.svg'
+import UserLogo from '../public/images/user_logo.svg'
 import { SearchOutlined } from '@ant-design/icons'
 import Link from 'next/link'
 

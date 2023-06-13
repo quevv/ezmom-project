@@ -1,9 +1,10 @@
+"use client"
 import React from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import Link from 'next/link'
 import FlashSaleDrawer from './flash-sale-drawer'
-import ProductCard from '@/app/components/ProductCard'
+import ProductCard from '@/components/ProductCard'
 import ProductPic from '../../../../public/images/product/product.jpg'
 
 const FlashSale = () => {
@@ -67,7 +68,7 @@ const FlashSale = () => {
         <FlashSaleDrawer data={dumbData}/>
       </div>
 
-      <Swiper spaceBetween={50} slidesPerView={3} autoplay={true}>
+      <Swiper spaceBetween={50} slidesPerGroupAuto={true} slidesPerView={3} autoplay={true}>
         {dumbData.map((item) => (
           <SwiperSlide key={item.id}>
             <ProductCard data={item}/>

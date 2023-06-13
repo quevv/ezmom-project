@@ -1,17 +1,17 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
-import CartLogo from '../../public/images/shopping_cart_logo.svg'
+import CartLogo from '../public/images/shopping_cart_logo.svg'
 
 const ProductCard = (data) => {
   const productItem = data.data
-  console.log(productItem);
+  // console.log(productItem);
   return (
     <div className="bg-white p-3 rounded-lg shadow-md m-2">
       <Link href={'/'}>
         <div className="flex justify-center">
           <Image
-            src={productItem.productImg.ProductPic.src}
+            src={productItem.productImg.ProductPic? productItem.productImg.ProductPic.src : productItem.productImg.ProductPic2.src}
             width={180}
             height={100}
             alt={productItem.productName}

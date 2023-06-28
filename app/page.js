@@ -1,5 +1,3 @@
-"use client"
-import { useRouter } from 'next/navigation';
 import HomePage from './containers/home-page/home.container'
 
 export const metadata = {
@@ -8,7 +6,6 @@ export const metadata = {
 };
 
 export default function Home() {
-  const router = useRouter();
   return (
     <main>
       <HomePage/>

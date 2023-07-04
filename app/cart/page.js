@@ -10,7 +10,7 @@ export const metadata = {
 const Cart = () => {
   return (
     <div className="w-full">
-      <CartPage data={dumbDataMilk}/>
+      <CartPage/>
     </div>
     )
 }

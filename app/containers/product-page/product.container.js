@@ -43,6 +43,7 @@ const ProductDetails = ({ data }) => {
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
+  
   useEffect(() => {
     getProduct();
     getData();

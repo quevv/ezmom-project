@@ -11,20 +11,38 @@ import EzmomIcon from "../public/images/takeCareLogo.png";
 import { SearchOutlined } from "@ant-design/icons";
 import Link from "next/link";
 import { getCookieData } from "@/services/cookies";
+import TokenDecode from "@/services/tokenDecode";
+import { useRouter } from "next/navigation";
+import { notification } from "antd";
 
 const Header = () => {
   const [isScrollDown, setIsScrollDown] = useState(false);
   const [account, setAccount] = useState(null);
+  const router = useRouter();
+  const [noti, setNoti] = useState({
+    msg: "",
+    descript: "",
+  });
+
   useEffect(() => {
-    if (!getCookieData("account") == false) {
-      setAccount(JSON.parse(getCookieData("account")));
-      if(account != null) {
+    if (getCookieData("account")) {
+      setAccount(TokenDecode(getCookieData("account")));
+      if (account != null) {
         if (typeof window !== "undefined") {
           window.location.reload();
         }
       }
     }
   }, []);
+
+  const [api, contextHolder] = notification.useNotification();
+  const openNotification = () => {
+    api.info({
+      message: noti.msg,
+      description: noti.descript,
+      duration: 0,
+    });
+  };
   const handleScroll = () => {
     if (window.scrollY >= 150) {
       setIsScrollDown(true);
@@ -35,6 +53,7 @@ const Header = () => {
   }
   return (
     <header className="flex justify-center fixed w-full z-50 font-bold">
+      {contextHolder}
       {isScrollDown ? (
         <ScrolledHeader />
       ) : (
@@ -47,15 +66,31 @@ const Header = () => {
                 </Link>
               </li>
               <li className="hover:text-pink-500">
-                <Link rel="preload" className="flex items-center" href="/">
+                <button
+                  rel="preload"
+                  className="flex items-center"
+                  onClick={() => {
+                    if (account) {
+                      router.push(`/baby`);
+                    } else {
+                      setNoti({
+                        msg: "Bạn chưa đăng nhập!",
+                        descript:
+                          "Vui lòng đăng nhập để truy cập vào trang này.",
+                      });
+                      openNotification();
+                    }
+                  }}
+                >
                   <Image
+                    className="p-1"
                     src={EzmomIcon}
                     width={40}
                     height={40}
                     alt="Grow path"
                   />{" "}
                   <p className="ml-1">Lộ Trình</p>
-                </Link>
+                </button>
               </li>
               <li className="hover:text-pink-500">
                 <Link rel="preload" className="flex items-center" href="/">
@@ -117,7 +152,7 @@ const ScrolledHeader = () => {
   const [account, setAccount] = useState(null);
   useEffect(() => {
     if (!getCookieData("account") == false) {
-      setAccount(JSON.parse(getCookieData("account")));
+      setAccount(TokenDecode(getCookieData("account")));
     }
   }, []);
   return (
@@ -133,8 +168,14 @@ const ScrolledHeader = () => {
             </Link>
           </li>
           <li className="rounded-full hover:bg-pink-300 p-2">
-            <Link className="flex items-center" href="/">
-              <Image src={EzmomIcon} width={40} height={40} alt="Grow path" />
+            <Link className="flex items-center" href="/baby">
+              <Image
+                className="p-1"
+                src={EzmomIcon}
+                width={40}
+                height={40}
+                alt="Grow path"
+              />
             </Link>
           </li>
           <li className="rounded-full hover:bg-pink-300 p-2">

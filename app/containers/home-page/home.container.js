@@ -9,9 +9,10 @@ import { milkCateList } from "@/data";
 
 const HomePage = () => {
   const [products, setProducts] = useState(null);
+  const [pagination, setPagination] = useState(1);
   const getData = async () => {
     try {
-      const res = (await productApi.getProducts()).data;
+      const res = (await productApi.getProducts(pagination)).data;
       setProducts(res.result);
     } catch (e) {
       setProducts(null)

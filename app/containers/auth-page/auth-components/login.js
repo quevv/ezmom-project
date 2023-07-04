@@ -1,6 +1,7 @@
 "use client";
 import { authApi } from "@/services/authApi";
 import { getCookieData, setCookieData } from "@/services/cookies";
+import TokenDecode from "@/services/tokenDecode";
 import { notification } from "antd";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -9,7 +10,7 @@ const Login = () => {
   const router = useRouter();
   useEffect(() => {
     // console.log(!getCookieData("account"));
-    if(!getCookieData("account")==false){
+    if(getCookieData("account")){
       if (typeof window !== "undefined") {
         window.location.reload();
       }
@@ -64,9 +65,10 @@ const Login = () => {
       password: false,
     });
     try {
-      const res = await authApi.login(account);
+      const res = await authApi.jwtLogin(account);
       if (res.status == 200) {
-        setCookieData("account", JSON.stringify(res.data.result));
+        setCookieData("account", res.data.Token);
+        console.log(TokenDecode(res.data.Token));
         openNotification()
         window.location.reload();
         

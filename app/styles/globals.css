@@ -37,6 +37,9 @@ html {
   }
 }
 
+label{
+  font-weight: bold;
+}
 .ant-drawer .ant-drawer-conten{
   background-color: #f6eeee;
 }

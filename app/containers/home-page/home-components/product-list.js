@@ -6,7 +6,7 @@ import 'swiper/css'
 const ProductList = (Props) => {
   const cateList = Props.cateList
   const productList = Props.data
-    // console.log(cateList);
+    console.log(Props.data);
   return (
     <div className="w-full my-8">
       <div className="grid grid-cols-2 mb-4">

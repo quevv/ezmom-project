@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img src="https://scontent.fsgn5-5.fna.fbcdn.net/v/t1.15752-9/349217553_210420871804178_8391146609519217246_n.png?_nc_cat=100&ccb=1-7&_nc_sid=ae9488&_nc_ohc=iMTVdKQtRqMAX9jQ9ff&_nc_ht=scontent.fsgn5-5.fna&oh=03_AdRG7xXgMm9Ebg1BE-RyY9FiWyGPWUhPFWMwsnLBbG28Ng&oe=6496A18C"/>
+  <img src="./public/images/ezmom_logo.svg"/>
   <br/>
   EZMOM Baby
   <br/>

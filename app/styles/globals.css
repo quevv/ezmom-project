@@ -37,6 +37,11 @@ html {
   }
 }
 
+h3{
+  font-size: large;
+  font-weight: 600;
+}
+
 label{
   font-weight: bold;
 }

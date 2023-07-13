@@ -65,7 +65,7 @@ const Register = ({ onRegistrationComplete }) => {
       phoneNumber: false,
     });
 
-    const res = await authApi.register(account);
+    const res = await authApi.jwtRegister(account);
     if (res.status == 200) {
       onRegistrationComplete();
     }

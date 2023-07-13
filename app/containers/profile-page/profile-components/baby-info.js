@@ -24,12 +24,12 @@ const BabyInfo = ({ data }) => {
           <Link
             href={`/baby`}
             key={item.babyId}
-            className="flex justify-evenly items-center rounded-lg my-2 bg-pink-300 py-3 w-full hover:bg-pink-500 hover:text-white cursor-pointer active:bg-pink-400"
+            className="flex justify-start items-center rounded-lg my-2 bg-pink-300 py-3 w-full hover:bg-pink-500 hover:text-white cursor-pointer active:bg-pink-400"
           >
             <div>
               {item.gender == "female" ? (
                 <Image
-                  className="rounded-full bg-white p-1"
+                  className="rounded-full bg-white p-1 mx-6"
                   src={GirlAvatar}
                   width={50}
                   height={50}
@@ -37,7 +37,7 @@ const BabyInfo = ({ data }) => {
                 />
               ) : (
                 <Image
-                  className="rounded-full bg-white p-1"
+                  className="rounded-full bg-white p-1 mx-6"
                   src={BoyAvatar}
                   width={50}
                   height={50}

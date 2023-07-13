@@ -13,4 +13,8 @@ export const authApi = {
         const url = `/AuthJWT/Login`
         return axiosClient.post(url, params)
     },
+    jwtRegister: (params) => {
+        const url = `/AuthJWT/Register`
+        return axiosClient.post(url, params);
+    },
 }

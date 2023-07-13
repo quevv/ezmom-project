@@ -84,7 +84,6 @@ const PaymentInfo = ({ data }) => {
       try {
         const res = (await orderApi.addOrder(order)).data;
         if (res.isSuccess) {
-          console.log(res);
           {
             data.map((item) => {
               const orderDetail = {
@@ -96,6 +95,7 @@ const PaymentInfo = ({ data }) => {
               handleOrderDetails(orderDetail);
             });
           }
+          localStorage.removeItem("cart");
         } else {
           if (!res.isSuccess) {
             setNoti({
@@ -105,7 +105,14 @@ const PaymentInfo = ({ data }) => {
             });
             openNotification();
           }
+          return;
         }
+        setNoti({
+          msg: "Đặt hàng thành công!",
+          descript:
+            "Bạn đã đặt hàng thành công, bạn có thể theo dõi đơn hàng ở trang hồ sơ cá nhân.",
+        });
+        openNotification();
       } catch (e) {
         console.log(e);
       }

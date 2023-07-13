@@ -20,8 +20,8 @@ const Header = () => {
   const [account, setAccount] = useState(null);
   const router = useRouter();
   const [noti, setNoti] = useState({
-    msg: "",
-    descript: "",
+    msg: "Bạn chưa đăng nhập!",
+    descript: "Vui lòng đăng nhập để truy cập vào trang này.",
   });
 
   useEffect(() => {
@@ -109,7 +109,14 @@ const Header = () => {
                     className="flex items-center"
                     href="/profile"
                   >
-                    <Image src={UserLogo} alt="account" /> <p>{account.name}</p>
+                    <Image src={UserLogo} alt="account" />{" "}
+                    <p>
+                      {account.name.split(" ")[0] +
+                        " " +
+                        account.name.split(" ")[
+                          account.name.split(" ").length - 1
+                        ]}
+                    </p>
                   </Link>
                 ) : (
                   <Link
@@ -150,6 +157,18 @@ const Header = () => {
 };
 const ScrolledHeader = () => {
   const [account, setAccount] = useState(null);
+  const [noti, setNoti] = useState({
+    msg: "Bạn chưa đăng nhập!",
+    descript: "Vui lòng đăng nhập để truy cập vào trang này.",
+  });
+  const [api, contextHolder] = notification.useNotification();
+  const openNotification = () => {
+    api.info({
+      message: noti.msg,
+      description: noti.descript,
+      duration: 0,
+    });
+  };
   useEffect(() => {
     if (!getCookieData("account") == false) {
       setAccount(TokenDecode(getCookieData("account")));
@@ -157,6 +176,7 @@ const ScrolledHeader = () => {
   }, []);
   return (
     <header className="w-full grid grid-cols-3  bg-white">
+      {contextHolder}
       <Link href="/">
         <Image className=" h-[6rem]" src={EzMomLogo} alt="EzMom Baby Logo" />
       </Link>
@@ -168,7 +188,20 @@ const ScrolledHeader = () => {
             </Link>
           </li>
           <li className="rounded-full hover:bg-pink-300 p-2">
-            <Link className="flex items-center" href="/baby">
+            <button
+              onClick={() => {
+                if (account) {
+                  router.push(`/baby`);
+                } else {
+                  setNoti({
+                    msg: "Bạn chưa đăng nhập!",
+                    descript: "Vui lòng đăng nhập để truy cập vào trang này.",
+                  });
+                  openNotification();
+                }
+              }}
+              className="flex items-center"
+            >
               <Image
                 className="p-1"
                 src={EzmomIcon}
@@ -176,7 +209,7 @@ const ScrolledHeader = () => {
                 height={40}
                 alt="Grow path"
               />
-            </Link>
+            </button>
           </li>
           <li className="rounded-full hover:bg-pink-300 p-2">
             <Link className="flex items-center" href="/">

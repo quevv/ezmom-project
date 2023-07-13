@@ -35,8 +35,8 @@ const ProductDetails = ({ data }) => {
       setProductItem(null);
     }
   };
-  const getData = async () => {
-    const res = (await productApi.getProducts()).data;
+  const getProducts = async () => {
+    const res = (await productApi.getRecommender({month:6, page:1})).data;
     setProducts(res.result);
   };
 
@@ -46,7 +46,7 @@ const ProductDetails = ({ data }) => {
   
   useEffect(() => {
     getProduct();
-    getData();
+    getProducts()
   }, []);
 
   const handleAddToCart = () => {
@@ -155,7 +155,8 @@ const ProductDetails = ({ data }) => {
         )}
 
         <div className="w-full h-2 bg-gray-300 my-6 rounded-lg"></div>
-        <CustomSwiper title="Sản Phẩm Tương Tự" swiperData={products} />
+        {!products.length == 0?<CustomSwiper title="Sản phẩm tương tự" swiperData={products} />:<></>}
+        
         {/* <div className="w-full h-2 bg-gray-300 my-6"></div>
         <CustomSwiper title="Sản Phẩm Bán Chạy" swiperData={dumbDataMilk}/> */}
       </div>

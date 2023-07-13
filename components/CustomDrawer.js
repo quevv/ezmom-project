@@ -50,7 +50,7 @@ const CustomDrawer = (params) => {
         >
           <div className="grid grid-cols-3">
             {productList.map((item) => (
-              <ProductCard key={item.id} data={item} />
+              <ProductCard key={item.productId} data={item} />
             ))}
           </div>
         </Drawer>

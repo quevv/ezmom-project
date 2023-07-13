@@ -13,7 +13,7 @@ import TokenDecode from "@/services/tokenDecode";
 const ProfileContainer = () => {
   const router = useRouter();
   const [account, setAccount] = useState(null);
-  const [baby, setBaby] = useState(null);
+  const [baby, setBaby] = useState([]);
   const [rightSide, setRightSide] = useState("order");
 
   const HandleRightSide = ({data}) => {
@@ -71,8 +71,8 @@ const ProfileContainer = () => {
             <> - Phone Number</>
           )}
           <span className="font-bold my-2">Baby</span>
-          {baby == null ? (
-            <span className="text-pink-500">
+          {baby.length == 0 ? (
+            <span className="text-pink-500 mb-3">
               Người dùng tạm thời chưa nhập thông tin bé nhà. Nếu có thể hãy
               cung cấp cho chúng tôi những thông tin về bé nhà để cùng theo dõi
               sự phát triển của bé nhé.

@@ -3,9 +3,9 @@ import React from 'react'
 import CustomSwiper from '@/components/CustomSwiper'
 import { dumbDataMilk } from '@/data'
 
-const FlashSale = () => {
+const FlashSale = ({data}) => {
   return (
-    <CustomSwiper title="Flash Sale" swiperData={dumbDataMilk} drawerData={dumbDataMilk}/>
+    <CustomSwiper title="Sản Phẩm cho bé 0-1 tuổi" swiperData={data} drawerData={data}/>
   )
 }
 

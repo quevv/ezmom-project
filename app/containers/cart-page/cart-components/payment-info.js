@@ -5,30 +5,42 @@ import MomoPay from "../../../../public/images/MoMo_Logo.png";
 import CashPay from "../../../../public/images/cashPay.png";
 import { getCookieData } from "@/services/cookies";
 import { useRouter } from "next/navigation";
-import CartItems from "./cart-item";
-import { notification } from "antd";
+import MomoPayInfo from "@/public/images/momoPayInfo.jpg";
+import { Drawer, notification } from "antd";
 import TokenDecode from "@/services/tokenDecode";
 import { orderApi } from "@/services/orderApi";
 
-const PaymentInfo = ({ data }) => {
+const PaymentInfo = ({ data, setCartItem }) => {
   const router = useRouter();
-  const [payment, setPayment] = useState("cash");
-  let countProduct;
-  let totalBill = 0;
+  const [payment, setPayment] = useState("momo");
+  const [paymentToken, setPaymentToken] = useState(null);
+  let token = null;
+  let countProduct = 0;
+  let totalBill = 30000;
   const [account, setAccount] = useState(null);
-  const [errors, setErrors] = useState({
-    orderErr: false,
-    orderDetailErr: false,
-  });
+  const [openDrawer, SetOpenDrawer] = useState(false);
   const [noti, setNoti] = useState({
-    msg: "",
-    descript: "",
+    successMsg: {
+      msg: "Đặt hàng thành công!",
+      descript:
+        "Bạn đã đặt hàng thành công, vui lòng chờ cuộc gọi xác nhận đơn hàng của shop. Bạn có thể theo dõi đơn hàng ở trang hồ sơ cá nhân. Chúc bạn mua sắm vui vẻ!",
+    },
+    emptyCartMsg: {
+      msg: "Giỏ hàng chưa có sản phẩm nào!",
+      descript:
+        "Bạn vui lòng thêm sản phẩm vào giỏ hàng trước khi đặt hàng nhé.",
+    },
+    errorOrderMsg: {
+      msg: "Lỗi đặt hàng!",
+      descript:
+        "Chúng tôi gặp chút trục trặc trong quá trình xác nhận đơn hàng của bạn. Vui lòng load lại trang và đặt hàng lại. Shop vô cùng xin lỗi vì sự bất tiện này!",
+    },
   });
   const [api, contextHolder] = notification.useNotification();
-  const openNotification = () => {
+  const openNotification = (notiMsg) => {
     api.info({
-      message: noti.msg,
-      description: noti.descript,
+      message: notiMsg.msg,
+      description: notiMsg.descript,
       duration: 0,
     });
   };
@@ -46,9 +58,9 @@ const PaymentInfo = ({ data }) => {
   }, []);
 
   if (data) {
-    countProduct = data.length;
     data.map((item) => {
       totalBill = totalBill + item.productPrice * item.cartQuantity;
+      countProduct += item.cartQuantity;
     });
   }
 
@@ -63,68 +75,69 @@ const PaymentInfo = ({ data }) => {
     }
   }, [data]);
 
-  const handleOrderDetails = async (data) => {
-    try {
-      (await orderApi.addOrderDetails(data)).data;
-    } catch (e) {
-      console.log(e);
-    }
+  const handleCloseDrawer = () => {
+    SetOpenDrawer(false);
+  };
+  const handleOpenDrawer = () => {
+    SetOpenDrawer(true);
   };
 
   const handleOrder = async () => {
-    if (!data.length) {
-      setNoti({
-        msg: "Giỏ hàng chưa có sản phẩm nào!",
-        descript: "Bạn vui lòng thêm sản phẩm vào giỏ hàng trước khi đặt hàng",
-      });
-      openNotification();
+    if (!JSON.parse(localStorage.getItem("cart")) || !data || !data.length) {
+      openNotification(noti.emptyCartMsg);
     } else if (!account) {
       router.push(`/auth`);
     } else if (order.accountId && order.shippingAddress) {
       try {
         const res = (await orderApi.addOrder(order)).data;
-        if (res.isSuccess) {
+        if (res) {
+          token = res.result.token;
+          setPaymentToken(res.result.token);
+          let count = 0;
           {
-            data.map((item) => {
+            data.map(async (item) => {
               const orderDetail = {
-                orderId: res.result.orderId,
+                orderId: res.result.oderId,
                 productId: item.productId,
                 quantity: item.cartQuantity,
                 unitPrice: item.productPrice,
               };
-              handleOrderDetails(orderDetail);
+              try {
+                const orderDetailRes = (
+                  await orderApi.addOrderDetails(orderDetail)
+                ).data;
+                if (orderDetailRes.isSuccess) {
+                  count++;
+                }
+              } catch (e) {
+                console.error(e);
+              }
+
+              if (count === data.length) {
+                localStorage.removeItem("cart");
+                setCartItem([]);
+                if (payment == "momo" && token) {
+                  handleOpenDrawer();
+                }
+                else{
+                  openNotification(noti.successMsg);
+                }
+              }
             });
           }
-          localStorage.removeItem("cart");
         } else {
           if (!res.isSuccess) {
-            setNoti({
-              msg: "Lỗi đặt hàng!",
-              descript:
-                "Chúng tôi gặp chút trục trặc trong quá trình xác nhận đơn hàng của bạn. Vui lòng load lại trang và đặt hàng lại",
-            });
-            openNotification();
+            openNotification(noti.errorOrderMsg);
           }
-          return;
         }
-        setNoti({
-          msg: "Đặt hàng thành công!",
-          descript:
-            "Bạn đã đặt hàng thành công, bạn có thể theo dõi đơn hàng ở trang hồ sơ cá nhân.",
-        });
-        openNotification();
       } catch (e) {
-        console.log(e);
+        console.error(e);
       }
     }
   };
 
-  const handleCashPayment = () => {
-    setPayment("cash");
-  };
-
-  const handleMomoPayment = () => {
-    setPayment("momo");
+  const handlePayment = (payment) => {
+    setPayment(payment);
   };
 
   return (
@@ -146,21 +159,23 @@ const PaymentInfo = ({ data }) => {
         <div className="border-b-2 flex justify-center p-4">
           <span className="font-bold text-2xl">Thông tin đơn hàng</span>
         </div>
-        <div className="grid grid-cols-2 px-6 py-4">
+        <div className="grid grid-cols-2 gap-2 px-6 py-4">
           <div>Số sản phẩm: </div>
-          <span>{countProduct ? <>{countProduct}</> : <></>}</span>
+          <span>{countProduct ? <>{countProduct}</> : <>0</>}</span>
           <span>Phí vận chuyển: </span>
           <span> {(30000).toLocaleString()}đ </span>
           <span className="font-bold">Thành tiền: </span>
           <span className="font-bold text-pink-400">
-            {totalBill ? <>{totalBill.toLocaleString()}</> : <></>}đ
+            {data ? <>{totalBill.toLocaleString()}</> : <>0</>}đ
           </span>
         </div>
         <div className="border-t-2 flex flex-col items-center justify-center px-6 py-4">
           <span className="font-bold"> Chọn phương thức thanh toán </span>
           <div className="flex justify-evenly w-full my-6">
             <button
-              onClick={handleMomoPayment}
+              onClick={() => {
+                handlePayment("momo");
+              }}
               className={
                 payment == "momo"
                   ? "px-2 rounded-lg border-2 border-pink-500"
@@ -177,7 +192,9 @@ const PaymentInfo = ({ data }) => {
             </button>
 
             <button
-              onClick={handleCashPayment}
+              onClick={() => {
+                handlePayment("cash");
+              }}
               className={
                 payment == "cash"
                   ? "px-2 rounded-lg border-2 border-pink-500"
@@ -201,6 +218,25 @@ const PaymentInfo = ({ data }) => {
           Đặt Hàng
         </button>
       </div>
+      <Drawer
+        title={"Thanh Toán bằng Momo"}
+        placement={"right"}
+        closable={true}
+        onClose={handleCloseDrawer}
+        open={openDrawer}
+      >
+        <div className="flex flex-col justify-center items-center px-4">
+          <div className="flex flex-col justify-center items-center my-4">
+            <p className="my-2">Thông tin thanh toán</p>
+            <p className="my-2">Số tiền cần chuyển: <span className="rounded-full p-2 bg-pink-400 my-2">{totalBill.toLocaleString()}</span></p>
+            <p className="my-2">Nội dung giao dịch: <span className="rounded-full p-2 bg-pink-400 my-2">{paymentToken}</span></p>
+            <i>Hãy quét mã và chuyển tiền bằng ứng dụng Momo với <b className="underline">lời nhắn</b> là <b className="underline">Nội dung giao dịch</b> ở trên</i>
+          </div>
+          <Image className="mb-4" alt="Momo Payment" src={MomoPayInfo} width={300} height={500} />
+          <i>Sau khi giao dịch chuyển tiền, quý khách vui lòng chờ cuộc gọi xác nhận đơn hàng.</i>
+          <b>Chân thành cảm ơn bạn đã mua hàng của Ezmom!</b>
+        </div>
+      </Drawer>
     </div>
   );
 };

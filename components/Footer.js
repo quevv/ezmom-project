@@ -1,6 +1,20 @@
-import React from "react";
+'use client'
+import { getCookieData } from "@/services";
+import TokenDecode from "@/services/tokenDecode";
+import React, { useEffect, useState } from "react";
 
 const Footer = () => {
+  const [account, setAccount] = useState(null);
+
+  useEffect(() => {
+    if (getCookieData("account")) {
+      setAccount(TokenDecode(getCookieData("account")));
+    }
+  }, []);
+
+  if (account && account.role == "admin") {
+    return <> </>;
+  }
   return (
     <footer className="w-full grid grid-cols-3 gap-3 bg-[#FA5A96] py-10 px-20 text-white">
       <div>
@@ -18,15 +32,6 @@ const Footer = () => {
           <li>
             <a href="/#">Giới thiệu về Ezmom Baby</a>
           </li>
-          <li>
-            <a href="/#">Thông tin tuyển dụng</a>
-          </li>
-          <li>
-            <a href="/#">Điều khoản sử dụng</a>
-          </li>
-          <li>
-            <a href="/#">Chính sách bảo mật</a>
-          </li>
         </ul>
       </div>
       <div>
@@ -35,19 +40,10 @@ const Footer = () => {
         </div>
         <ul className="text-sm">
           <li>
-            <a href="/#">Tra cứu hoá đơn</a>
-          </li>
-          <li>
-            <a href="/#">Mua và nhận hàng online</a>
-          </li>
-          <li>
             <a href="/#">Hình thức thanh toán</a>
           </li>
           <li>
-            <a href="/#">Đổi trả và hoàn tiển</a>
-          </li>
-          <li>
-            <a href="/#">Bảo hành & Bảo trì</a>
+            <a href="/#">Đổi trả và hoàn tiền</a>
           </li>
         </ul>
       </div>

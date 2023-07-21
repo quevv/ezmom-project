@@ -28,7 +28,7 @@ const CustomDrawer = (params) => {
           title={
             <div className="flex justify-between items-center">
               <p className="font-bold text-2xl text-pink-500">
-                Tất cả sản phẩm {params.title? params.title : ""}
+                {params.title? params.title : ""}
               </p>
               <div className="flex px-3 rounded-full bg-white border-black border-2 hover:border-pink-500 items-center">
                 <input

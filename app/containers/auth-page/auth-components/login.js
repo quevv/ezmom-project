@@ -8,17 +8,6 @@ import React, { useEffect, useState } from "react";
 
 const Login = () => {
   const router = useRouter();
-  useEffect(() => {
-    // console.log(!getCookieData("account"));
-    if(getCookieData("account")){
-      if (typeof window !== "undefined") {
-        window.location.reload();
-      }
-      setTimeout(() => {
-        router.back();
-      }, 0);
-    }
-  })
   const [account, setAccount] = useState({
     email: "",
     password: "",
@@ -31,12 +20,28 @@ const Login = () => {
   const [api, contextHolder] = notification.useNotification();
   const openNotification = () => {
     api.info({
-      message: 'Đăng Nhập thành công!',
-      description:
-        'Bạn đã đăng nhập thành công. Chúc bạn mua sắm vui vẻ!',
+      message: "Đăng Nhập thành công!",
+      description: "Bạn đã đăng nhập thành công. Chúc bạn mua sắm vui vẻ!",
       duration: 0,
     });
   };
+
+  useEffect(() => {
+    if (getCookieData("account")) {
+      console.log(TokenDecode(getCookieData("account")));
+      const decodedToken = TokenDecode(getCookieData("account"));
+      if (decodedToken.role === "admin") {
+        setTimeout(() => {
+          router.push(`/admin/orders`);
+        }, 0);
+      } else {
+        setTimeout(() => {
+          router.push(`/`);
+        }, 0);
+      }
+    }
+  }, []);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setAccount((prevAccount) => ({
@@ -44,6 +49,7 @@ const Login = () => {
       [name]: value,
     }));
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!account.email || !account.password) {
@@ -59,19 +65,25 @@ const Login = () => {
       }));
       return;
     }
-
     setErrors({
       email: false,
       password: false,
     });
     try {
       const res = await authApi.jwtLogin(account);
+      console.log(res.status);
       if (res.status == 200) {
+        openNotification();
         setCookieData("account", res.data.Token);
         console.log(TokenDecode(res.data.Token));
-        openNotification()
-        window.location.reload();
-        
+        if (typeof window !== "undefined") {
+          window.location.reload();
+        }
+        // if (TokenDecode(res.data.Token).role === "admin") {
+        //   router.push("/admin/users");
+        // } else if (TokenDecode(res.data.Token).role === "customer") {
+        //   router.push("/");
+        // }
       }
     } catch (e) {
       setErrors(() => ({
@@ -80,7 +92,9 @@ const Login = () => {
       }));
     }
   };
+
   const textinputcss = "p-2 rounded-lg my-2";
+
   return (
     <div className="flex justify-center">
       {contextHolder}

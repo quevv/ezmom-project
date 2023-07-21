@@ -5,8 +5,20 @@ import { babyApi } from "@/services/babyApi";
 import { getCookieData } from "@/services/cookies";
 import TokenDecode from "@/services/tokenDecode";
 
-const AddBaby = () => {
+const AddBaby = ({getBaby}) => {
   const [account, setAccount] = useState();
+  const [noti, setNoti] = useState({
+    successMsg: {
+      msg: "Thêm thông tin bé thành công!",
+      descript:
+        "Bạn đã thêm thông tin bé thành công, Hãy ghé trang lộ trình để tìm hiểu các mẹo để chăm sóc bé nhé.",
+    },
+    errorMsg: {
+      msg: "Thêm sản phẩm thất bại!",
+      descript: "Vui lòng kiểm tra lại các thông tin trước khi thêm sản phẩm.",
+    },
+  });
+
   useEffect(() => {
     if (getCookieData("account")) {
       setAccount(TokenDecode(getCookieData("account")));
@@ -86,9 +98,7 @@ const AddBaby = () => {
       }
       const res = await babyApi.addBaby(newBaby);
       if (res.status == 200) {
-        if (typeof window !== "undefined") {
-          window.location.reload();
-        }
+        getBaby(account.accountId);
       }
     } catch (e) {
       setErrors(() => ({
@@ -130,6 +140,7 @@ const AddBaby = () => {
           name="dob"
           value={newBaby.dob}
           className={inputCss}
+          min={moment(new Date()).utc().subtract(3, "years").format("YYYY-MM-DD")}
           max={newBaby.dob}
           type="date"
         />

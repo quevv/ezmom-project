@@ -14,6 +14,7 @@ import { getCookieData } from "@/services/cookies";
 import TokenDecode from "@/services/tokenDecode";
 import { useRouter } from "next/navigation";
 import { notification } from "antd";
+import AdminHeader from "./AdminHeader";
 
 const Header = () => {
   const [isScrollDown, setIsScrollDown] = useState(false);
@@ -27,11 +28,6 @@ const Header = () => {
   useEffect(() => {
     if (getCookieData("account")) {
       setAccount(TokenDecode(getCookieData("account")));
-      if (account != null) {
-        if (typeof window !== "undefined") {
-          window.location.reload();
-        }
-      }
     }
   }, []);
 
@@ -50,6 +46,10 @@ const Header = () => {
   };
   if (typeof window !== "undefined") {
     window.addEventListener("scroll", handleScroll);
+  }
+
+  if (account && account.role == "admin") {
+    return <AdminHeader />;
   }
   return (
     <header className="flex justify-center fixed w-full z-50 font-bold">
@@ -169,6 +169,9 @@ const ScrolledHeader = () => {
       duration: 0,
     });
   };
+  const router = useRouter();
+
+
   useEffect(() => {
     if (!getCookieData("account") == false) {
       setAccount(TokenDecode(getCookieData("account")));
@@ -178,7 +181,13 @@ const ScrolledHeader = () => {
     <header className="w-full grid grid-cols-3  bg-white">
       {contextHolder}
       <Link href="/">
-        <Image className=" h-[6rem]" src={EzMomLogo} alt="EzMom Baby Logo" />
+        <Image
+          width={120}
+          height={40}
+          className=" h-[6rem]"
+          src={EzMomLogo}
+          alt="EzMom Baby Logo"
+        />
       </Link>
       <div className="flex justify-center">
         <ul className=" grid grid-cols-5 gap-10 place-items-center ">

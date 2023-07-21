@@ -32,7 +32,7 @@ const ProductCard = (props) => {
           -{(productItem.discount * 100).toFixed(0)}%
         </div></> : <div className='font-bold'> Số lượng: {productItem.quantity} </div>}
         
-        <div className="rounded-full hover:bg-pink-300 p-1 active:bg-pink-400">
+        {/* <div className="rounded-full hover:bg-pink-300 p-1 active:bg-pink-400">
           <Image
             alt="Add to Cart"
             src={CartLogo}
@@ -40,7 +40,7 @@ const ProductCard = (props) => {
             width={30}
             height={30}
           />
-        </div>
+        </div> */}
       </div>
     </div>
   )

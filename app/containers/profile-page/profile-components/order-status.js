@@ -4,10 +4,33 @@ import ShoppingPic from "../../../../public/images/cuteShoppingPic.png";
 import Image from "next/image";
 import Link from "next/link";
 import { orderApi } from "@/services/orderApi";
+import moment from "moment";
+import { Table } from "antd";
+import { getCookieData } from "@/services";
 
 const OrderStatus = ({ data }) => {
   const [order, setOrder] = useState([]);
   const [orderStatus, setOrderStatus] = useState("Pending");
+
+  const orderListMapping = (data) => {
+    const list = [];
+    data.map((item) => {
+      const orderItem = {
+        key: item.orderId,
+        orderId: item.orderId,
+        accountId: item.accountId,
+        orderDate: item.orderDate,
+        orderDetails: item.orderDetails,
+        orderStatus: item.orderStatus,
+        prices: item.prices,
+        shippingAddress: item.shippingAddress,
+        totalQuantity: item.totalQuantity,
+        paymentToken: item.payments[0].tokenPayment,
+      };
+      list.push(orderItem);
+    });
+    return list;
+  };
 
   const OrderSpace = () => {
     if (order.length == 0) {
@@ -40,15 +63,17 @@ const OrderStatus = ({ data }) => {
             Tiếp tục mua sắm
           </Link>
         </div>
-      )
+      );
     }
 
     return (
-      <>
-        {filteredOrders.map((item) => (
-          <div key={item.orderId}>{orderStatus}</div>
-        ))}
-      </>
+      <div className="w-full">
+        <Table
+          pagination={false}
+          columns={column}
+          dataSource={filteredOrders}
+        />
+      </div>
     );
   };
 
@@ -57,12 +82,16 @@ const OrderStatus = ({ data }) => {
   };
 
   useEffect(() => {
-    getOrder(data);
+    if (getCookieData("account")) getOrder(data);
   }, []);
 
   const getOrder = async (userId) => {
-    const res = (await orderApi.getOrderOfUser(userId)).data;
-    setOrder(res.result);
+    if (getCookieData("account")) {
+      const res = (await orderApi.getOrderOfUser(userId)).data;
+      if(res.isSuccess){
+        setOrder(orderListMapping(res.result));
+      }
+    }
   };
 
   const orderStatusBtnCss = "rounded-t-lg active:bg-pink-400 py-6 w-full";
@@ -113,3 +142,22 @@ const OrderStatus = ({ data }) => {
 };
 
 export default OrderStatus;
+
+const column = [
+  {
+    title: "Mã đơn hàng",
+    dataIndex: "paymentToken",
+    key: "paymentToken",
+  },
+  {
+    title: "Số lượng",
+    dataIndex: "totalQuantity",
+    key: "totalQuantity",
+  },
+  {
+    title: "Đơn giá",
+    dataIndex: "prices",
+    key: "prices",
+    render: (text) => <>{text.toLocaleString()}đ</>,
+  },
+];

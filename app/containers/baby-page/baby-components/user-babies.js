@@ -23,7 +23,7 @@ const UserBabies = ({ onSelectBaby }) => {
     }
   };
   useEffect(() => {
-    getBabies();
+    getBabies(getCookieData("account"));
   }, [account]);
 
   const handleSelectBaby = (data) => {onSelectBaby(data);};

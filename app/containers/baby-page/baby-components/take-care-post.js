@@ -22,17 +22,16 @@ const TakeCarePost = ({ data }) => {
     if (data) {
       const res = (await babyTakeCareApi.getPostByMonth(ageCalculate(data)))
         .data;
-      console.log(res.result);
-      setTakeCarePost(ReactHtmlParser(res.result))
+      setTakeCarePost(ReactHtmlParser(res.result));
     }
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     getPost();
-  },[data])
+  }, [data]);
   // console.log(data);
   return (
-    <div className="col-span-4">
+    <div className="col-span-4 px-3">
       {data ? (
         <div className=" flex flex-col justify-center items-center">
           <h4 className="font-bold">Bé: {data.name}</h4>

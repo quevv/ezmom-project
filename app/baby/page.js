@@ -8,7 +8,7 @@ export const metadata = {
 
 const BabyTakeCare = () => {
   return (
-    <div className="w-full">
+    <div className="w-full min-h-[500px]">
       <BabyContainer/>
     </div>
   )

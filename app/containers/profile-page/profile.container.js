@@ -16,12 +16,12 @@ const ProfileContainer = () => {
   const [baby, setBaby] = useState([]);
   const [rightSide, setRightSide] = useState("order");
 
-  const HandleRightSide = ({data}) => {
+  const HandleRightSide = () => {
     if (rightSide == "order") {
       return <OrderStatus data={account?account.accountId:0}/>;
     } else if (rightSide == "userInfo") {
       return <div>User info</div>;
-    } else return <AddBaby />;
+    } else return <AddBaby getBaby={getBaby}/>;
   };
 
   const HandleAddBaby = () => {

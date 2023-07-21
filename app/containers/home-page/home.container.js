@@ -4,15 +4,27 @@ import Banner from "./home-components/banner";
 import FlashSale from "./home-components/flash-sale";
 import SideBanner from "./home-components/side-banner";
 import ProductList from "./home-components/product-list";
-import { productApi } from "@/services";
+import { getCookieData, productApi } from "@/services";
 import { milkCateList } from "@/data";
 import { Pagination } from "antd";
+import TokenDecode from "@/services/tokenDecode";
+import { useRouter } from "next/navigation";
 
 const HomePage = () => {
   const [products, setProducts] = useState(null);
   const [pageNum, setPageNum] = useState(1);
   const [total, setTotal] = useState(0)
   const [recommender, setRecommender] = useState([]);
+  const router = useRouter()
+
+  useEffect(() => {
+    if (getCookieData("account")) {
+      if (TokenDecode(getCookieData("account")).role === "admin") {
+        router.push(`/admin/orders`);
+      }
+    }
+  }, []);
+
   const getRecommender = async () => {
     try{
       const res = (await productApi.getRecommender({month:6, page:1})).data
@@ -21,7 +33,7 @@ const HomePage = () => {
       }
     }
     catch(e) {
-      console.log(e);
+      console.error(e);
     }
   }
   const getData = async (page) => {
@@ -33,6 +45,7 @@ const HomePage = () => {
       setProducts(null);
     }
   };
+  
   useEffect(() => {
     getData(pageNum);
     getRecommender()
@@ -44,7 +57,7 @@ const HomePage = () => {
   }
 
   return (
-    <div className=" flex flex-col justify-start items-center py-[10rem] mx-16">
+    <div className="min-h-[500px] flex flex-col justify-start items-center py-[10rem] mx-16">
       <Banner />
       <SideBanner />
       <div className="w-[70%] flex justify-center" id="flash_sale">

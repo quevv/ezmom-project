@@ -132,18 +132,18 @@ const ProductDetails = ({ data }) => {
                 <div className="my-4 grid grid-cols-2 gap-4">
                   <button
                     onClick={handleAddToCart}
-                    className="border-2 border-pink-500 text-pink-500 rounded-lg font-bold hover:bg-pink-300 active:bg-pink-400 active:text-white"
+                    className="border-2 border-pink-500 py-3 text-pink-500 rounded-lg font-bold hover:bg-pink-300 active:bg-pink-400 active:text-white"
                   >
                     Thêm vào giỏ hàng
                   </button>
-                  <button
+                  {/* <button
                     onClick={() => {
                       console.log(cart);
                     }}
                     className="bg-pink-500 text-white rounded-lg py-3 font-bold hover:bg-pink-400 active:bg-pink-300"
                   >
                     Mua ngay
-                  </button>
+                  </button> */}
                 </div>
               </div>
             </div>

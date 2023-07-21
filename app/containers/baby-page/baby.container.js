@@ -41,7 +41,7 @@ const BabyContainer = () => {
 
   useEffect(() => {
     getRecommender();
-  });
+  },[selectBaby]);
 
   const handleSelectData = (data) => {
     setSelectBaby(data);

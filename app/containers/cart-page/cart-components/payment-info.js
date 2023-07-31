@@ -12,12 +12,11 @@ import { orderApi } from "@/services/orderApi";
 
 const PaymentInfo = ({ data, setCartItem }) => {
   const router = useRouter();
-  const [payment, setPayment] = useState("momo");
-  const [paymentToken, setPaymentToken] = useState(null);
+  const [payment, setPayment] = useState("cash");
+  const [orderBill, setOrderBill] = useState(null);
   let token = null;
   let countProduct = 0;
   let totalBill = 30000;
-  const [orderBill, setOrderBill] = useState(0);
   const [account, setAccount] = useState(null);
   const [openDrawer, SetOpenDrawer] = useState(false);
   const [noti, setNoti] = useState({
@@ -93,8 +92,8 @@ const PaymentInfo = ({ data, setCartItem }) => {
         const res = (await orderApi.addOrder(order)).data;
         if (res) {
           token = res.result.token;
-          setPaymentToken(res.result.token);
-          setOrderBill(res.result.prices);
+          setOrderBill(res.result);
+          // setOrderBill(res.result);
           let count = 0;
           {
             data.map(async (item) => {
@@ -114,15 +113,10 @@ const PaymentInfo = ({ data, setCartItem }) => {
               } catch (e) {
                 console.error(e);
               }
-
               if (count === data.length) {
                 localStorage.removeItem("cart");
                 setCartItem([]);
-              }
-              if (count === data.length && orderBill !== 0) {
                 if (payment == "momo" && token) {
-                  localStorage.removeItem("cart");
-                  setCartItem([]);
                   handleOpenDrawer();
                 } else {
                   openNotification(noti.successMsg);
@@ -230,19 +224,19 @@ const PaymentInfo = ({ data, setCartItem }) => {
         onClose={handleCloseDrawer}
         open={openDrawer}
       >
-        <div className="flex flex-col justify-center items-center px-4">
+        {orderBill? <div className="flex flex-col justify-center items-center px-4">
           <div className="flex flex-col justify-center items-center my-4">
             <p className="my-2">Thông tin thanh toán</p>
             <p className="my-2">
               Số tiền cần chuyển:{" "}
               <span className="rounded-full p-2 bg-pink-400 my-2">
-                {orderBill}
+                {orderBill.prices}
               </span>
             </p>
             <p className="my-2">
               Nội dung giao dịch:{" "}
               <span className="rounded-full p-2 bg-pink-400 my-2">
-                {paymentToken}
+                {orderBill.token}
               </span>
             </p>
             <i>
@@ -267,10 +261,10 @@ const PaymentInfo = ({ data, setCartItem }) => {
             onClick={handleCloseDrawer}
             className="my-8 rounded-lg bg-pink-400 hover:bg-pink-500 text-lg font-bold p-3"
           >
-            {" "}
-            Hoàn thành giao dịch{" "}
+            Hoàn thành giao dịch
           </button>
-        </div>
+        </div>:<></>}
+        
       </Drawer>
     </div>
   );

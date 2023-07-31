@@ -93,7 +93,7 @@ const Header = () => {
                 </button>
               </li>
               <li className="hover:text-pink-500">
-                <Link rel="preload" className="flex items-center" href="/">
+                <Link rel="preload" className="flex items-center" href="https://www.facebook.com/ezmombb/">
                   <Image src={ChatLogo} alt="Feedback" /> <p>Phản Hồi</p>
                 </Link>
               </li>
@@ -221,7 +221,7 @@ const ScrolledHeader = () => {
             </button>
           </li>
           <li className="rounded-full hover:bg-pink-300 p-2">
-            <Link className="flex items-center" href="/">
+            <Link className="flex items-center" href="https://www.facebook.com/ezmombb/">
               <Image src={ChatLogo} alt="Feedback" />
             </Link>
           </li>

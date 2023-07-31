@@ -20,8 +20,7 @@ const ProductDetails = ({ data }) => {
   const openNotification = () => {
     api.info({
       message: "Đã cho vào giỏ hàng!",
-      description:
-        "Sản phẩm đã được cho vào giỏ hàng. Tiếp tục mua sắm nhé!",
+      description: "Sản phẩm đã được cho vào giỏ hàng. Tiếp tục mua sắm nhé!",
       duration: 0,
     });
   };
@@ -36,31 +35,41 @@ const ProductDetails = ({ data }) => {
     }
   };
   const getProducts = async () => {
-    const res = (await productApi.getRecommender({month:6, page:1})).data;
+    const res = (await productApi.getRecommender({ month: 6, page: 1 })).data;
     setProducts(res.result);
   };
 
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
-  
+
   useEffect(() => {
     getProduct();
-    getProducts()
+    getProducts();
   }, []);
 
   const handleAddToCart = () => {
     try {
-      setCart((preCart) => [
-        ...preCart,
-        {
-          productName: productItem.name,
-          productId: productItem.productId,
-          img: productItem.img,
-          productPrice: productItem.price,
-          cartQuantity: quantity,
-        },
-      ]);
+      const existingProductIndex = cart.findIndex(
+        (item) => item.productId === productItem.productId
+      );
+
+      if (existingProductIndex !== -1) {
+        const updatedCart = [...cart];
+        updatedCart[existingProductIndex].cartQuantity += quantity;
+        setCart(updatedCart);
+      } else {
+        setCart((prevCart) => [
+          ...prevCart,
+          {
+            productName: productItem.name,
+            productId: productItem.productId,
+            img: productItem.img,
+            productPrice: productItem.price,
+            cartQuantity: quantity,
+          },
+        ]);
+      }
       openNotification();
     } catch (e) {
       console.log(e);
@@ -155,8 +164,12 @@ const ProductDetails = ({ data }) => {
         )}
 
         <div className="w-full h-2 bg-gray-300 my-6 rounded-lg"></div>
-        {!products.length == 0?<CustomSwiper title="Sản phẩm tương tự" swiperData={products} />:<></>}
-        
+        {!products.length == 0 ? (
+          <CustomSwiper title="Sản phẩm tương tự" swiperData={products} />
+        ) : (
+          <></>
+        )}
+
         {/* <div className="w-full h-2 bg-gray-300 my-6"></div>
         <CustomSwiper title="Sản Phẩm Bán Chạy" swiperData={dumbDataMilk}/> */}
       </div>

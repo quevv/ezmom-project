@@ -3,7 +3,7 @@ import { Modal } from "antd";
 import Image from "next/image";
 import React, { useState } from "react";
 
-const CartItems = ({ data, removeProduct }) => {
+const CartItems = ({ data, setCartItem }) => {
   const products = data;
   // console.log(removeProduct);
 
@@ -13,8 +13,14 @@ const CartItems = ({ data, removeProduct }) => {
     setDeleteProduct(id);
     setIsModalOpen(true);
   };
+
+  const removeProduct = (productId) => {
+    const updatedCart = products.filter(item => item.productId !== productId);
+    setCartItem(updatedCart);
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
+  };
+  
   const handleOk = () => {
-    // console.log(deleteProduct);
     removeProduct(deleteProduct)
     setIsModalOpen(false);
   };

@@ -22,7 +22,7 @@ const dataMapping = (data) => {
     };
     list.push(productItem);
   });
-  return list;
+  return list.reverse();
 };
 
 export const ProductManager = () => {

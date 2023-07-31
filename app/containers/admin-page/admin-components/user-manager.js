@@ -17,7 +17,7 @@ const dataMapping = (data) => {
     };
     list.push(orderItem);
   });
-  return list;
+  return list.reverse();
 };
 
 export const UserManager = () => {

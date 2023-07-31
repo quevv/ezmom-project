@@ -4,7 +4,7 @@ import { Modal, Select, Table } from "antd";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { EyeOutlined } from '@ant-design/icons'
-import { OrderDetailsDrawer } from "./order-details-drawer";
+import { OrderDetailsDrawer } from "@/components/OrderDetailsDrawer";
 
 const dataMapping = (data) => {
   const list = [];
@@ -24,7 +24,7 @@ const dataMapping = (data) => {
     };
     list.push(orderItem);
   });
-  return list;
+  return list.reverse();
 };
 
 export const OrderManager = () => {

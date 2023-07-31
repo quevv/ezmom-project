@@ -1,5 +1,5 @@
 import React from 'react'
-import Banner1 from '../../../../public/images/banner/banner_01.svg' 
+import Banner1 from '@/public/images/banner/banner_02.jpg' 
 import Image from 'next/image'
 
 const Banner = () => {

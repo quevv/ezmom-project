@@ -1,6 +1,7 @@
 import Header from "@/components/Header";
 import "./styles/globals.css";
 import Footer from "@/components/Footer";
+import Thumb from "@/public/images/banner/banner_02.jpg";
 
 export const metadata = {
   title: {
@@ -13,6 +14,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+      <head>
+        <meta property="og:image" content={Thumb} />
+      </head>
       <body>
         <Header />
         {children}

@@ -17,6 +17,7 @@ const PaymentInfo = ({ data, setCartItem }) => {
   let token = null;
   let countProduct = 0;
   let totalBill = 30000;
+  const [orderBill, setOrderBill] = useState(0);
   const [account, setAccount] = useState(null);
   const [openDrawer, SetOpenDrawer] = useState(false);
   const [noti, setNoti] = useState({
@@ -93,6 +94,7 @@ const PaymentInfo = ({ data, setCartItem }) => {
         if (res) {
           token = res.result.token;
           setPaymentToken(res.result.token);
+          setOrderBill(res.result.prices);
           let count = 0;
           {
             data.map(async (item) => {
@@ -116,10 +118,13 @@ const PaymentInfo = ({ data, setCartItem }) => {
               if (count === data.length) {
                 localStorage.removeItem("cart");
                 setCartItem([]);
+              }
+              if (count === data.length && orderBill !== 0) {
                 if (payment == "momo" && token) {
+                  localStorage.removeItem("cart");
+                  setCartItem([]);
                   handleOpenDrawer();
-                }
-                else{
+                } else {
                   openNotification(noti.successMsg);
                 }
               }
@@ -228,13 +233,43 @@ const PaymentInfo = ({ data, setCartItem }) => {
         <div className="flex flex-col justify-center items-center px-4">
           <div className="flex flex-col justify-center items-center my-4">
             <p className="my-2">Thông tin thanh toán</p>
-            <p className="my-2">Số tiền cần chuyển: <span className="rounded-full p-2 bg-pink-400 my-2">{totalBill.toLocaleString()}</span></p>
-            <p className="my-2">Nội dung giao dịch: <span className="rounded-full p-2 bg-pink-400 my-2">{paymentToken}</span></p>
-            <i>Hãy quét mã và chuyển tiền bằng ứng dụng Momo với <b className="underline">lời nhắn</b> là <b className="underline">Nội dung giao dịch</b> ở trên</i>
+            <p className="my-2">
+              Số tiền cần chuyển:{" "}
+              <span className="rounded-full p-2 bg-pink-400 my-2">
+                {orderBill}
+              </span>
+            </p>
+            <p className="my-2">
+              Nội dung giao dịch:{" "}
+              <span className="rounded-full p-2 bg-pink-400 my-2">
+                {paymentToken}
+              </span>
+            </p>
+            <i>
+              Hãy quét mã và chuyển tiền bằng ứng dụng Momo với{" "}
+              <b className="underline">lời nhắn</b> là{" "}
+              <b className="underline">Nội dung giao dịch</b> ở trên
+            </i>
           </div>
-          <Image className="mb-4" alt="Momo Payment" src={MomoPayInfo} width={300} height={500} />
-          <i>Sau khi giao dịch chuyển tiền, quý khách vui lòng chờ cuộc gọi xác nhận đơn hàng.</i>
+          <Image
+            className="mb-4"
+            alt="Momo Payment"
+            src={MomoPayInfo}
+            width={300}
+            height={500}
+          />
+          <i>
+            Sau khi giao dịch chuyển tiền, quý khách vui lòng chờ cuộc gọi xác
+            nhận đơn hàng.
+          </i>
           <b>Chân thành cảm ơn bạn đã mua hàng của Ezmom!</b>
+          <button
+            onClick={handleCloseDrawer}
+            className="my-8 rounded-lg bg-pink-400 hover:bg-pink-500 text-lg font-bold p-3"
+          >
+            {" "}
+            Hoàn thành giao dịch{" "}
+          </button>
         </div>
       </Drawer>
     </div>

@@ -4,13 +4,16 @@ import ShoppingPic from "../../../../public/images/cuteShoppingPic.png";
 import Image from "next/image";
 import Link from "next/link";
 import { orderApi } from "@/services/orderApi";
-import moment from "moment";
-import { Table } from "antd";
+import { Modal, Table } from "antd";
 import { getCookieData } from "@/services";
+import { OrderDetailsDrawer } from "@/components/OrderDetailsDrawer";
+import { useRouter } from "next/navigation";
 
 const OrderStatus = ({ data }) => {
   const [order, setOrder] = useState([]);
   const [orderStatus, setOrderStatus] = useState("Pending");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const router = useRouter();
 
   const orderListMapping = (data) => {
     const list = [];
@@ -29,7 +32,7 @@ const OrderStatus = ({ data }) => {
       };
       list.push(orderItem);
     });
-    return list;
+    return list.reverse();
   };
 
   const OrderSpace = () => {
@@ -88,11 +91,58 @@ const OrderStatus = ({ data }) => {
   const getOrder = async (userId) => {
     if (getCookieData("account")) {
       const res = (await orderApi.getOrderOfUser(userId)).data;
-      if(res.isSuccess){
+      if (res.isSuccess) {
         setOrder(orderListMapping(res.result));
       }
     }
   };
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  const handleOk = () => {
+    if (typeof window !== "undefined") {
+      window.open("https://www.facebook.com/ezmombb/", "_blank");
+    }
+    
+    setIsModalOpen(false);
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  const column = [
+    {
+      title: "Mã đơn hàng",
+      dataIndex: "paymentToken",
+      key: "paymentToken",
+    },
+    {
+      title: "Số lượng",
+      dataIndex: "totalQuantity",
+      key: "totalQuantity",
+    },
+    {
+      title: "Đơn giá",
+      dataIndex: "prices",
+      key: "prices",
+      render: (text) => <>{text.toLocaleString()}đ</>,
+    },
+    {
+      title: "Xem chi tiết",
+      key: 123,
+      render: (record) => <OrderDetailsDrawer record={record} />,
+    },
+    {
+      title: "Hủy đơn hàng",
+      key: 123,
+      render: ((record) => {
+        if(record.orderStatus !== "Done"){
+          return <button className="bg-red-500 hover:bg-red-400 rounded-lg p-2" onClick={() => showModal()}>Hủy</button>
+        }else return <button disabled className="text-gray-400 bg-red-300 rounded-lg p-2" onClick={() => showModal()}>Hủy</button>
+      }),
+    },
+  ];
 
   const orderStatusBtnCss = "rounded-t-lg active:bg-pink-400 py-6 w-full";
   const orderStatusBtnCssActive = "rounded-t-lg bg-pink-300 py-6 w-full";
@@ -137,27 +187,23 @@ const OrderStatus = ({ data }) => {
       <div className="w-full flex flex-col items-center justify-center">
         <OrderSpace />
       </div>
+      <Modal
+        title="Thay đổi trạng thái đơn hàng"
+        open={isModalOpen}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        okText="Truy cập"
+        cancelText="Hủy"
+      >
+        <p>
+          Bạn muốn hủy đơn hàng này? <br/> Vui lòng liên hệ với Fanpage EZMOM BABY
+          và cung cấp mã đơn hàng bạn muốn hủy cho Fanpage. Nhân viên sẽ kiểm
+          tra và xử lý giúp bạn. <br />
+          Bạn có muốn truy cập và Fanpage EZMOM BABY không?
+        </p>
+      </Modal>
     </div>
   );
 };
 
 export default OrderStatus;
-
-const column = [
-  {
-    title: "Mã đơn hàng",
-    dataIndex: "paymentToken",
-    key: "paymentToken",
-  },
-  {
-    title: "Số lượng",
-    dataIndex: "totalQuantity",
-    key: "totalQuantity",
-  },
-  {
-    title: "Đơn giá",
-    dataIndex: "prices",
-    key: "prices",
-    render: (text) => <>{text.toLocaleString()}đ</>,
-  },
-];

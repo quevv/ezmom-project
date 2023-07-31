@@ -42,15 +42,15 @@ export const OrderDetailsDrawer = ({ record }) => {
         open={openDrawer}
       >
         <div className="flex flex-col justify-center items-center">
-          <div className="w-[60%]">
+          <div className="w-[70%]">
             {orderDetails ? (
               orderDetails.map((item) => (
                 <div
                   key={item.orderDetailId}
-                  className="grid grid-cols-6 gap-4"
+                  className="grid grid-cols-6 gap-4 my-4"
                 >
                   <Image
-                    className="col-span-2"
+                    className="col-span-2 rounded-lg bg-white"
                     src={item.product.img}
                     width={200}
                     height={250}

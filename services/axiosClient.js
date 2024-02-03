@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosClient = (token) => {
-  const client = axios.create({ baseURL: "https://baby-milk-api.azurewebsites.net/api" });
+  const client = axios.create({ baseURL: "http://localhost:5207/api" });
   client.interceptors.request.use((config) => {
     config.headers.Authorization = `Bearer ${token}`;
     return config;
@@ -13,7 +13,7 @@ const axiosClient = (token) => {
 export default axiosClient;
 
 export const axiosClientFile = (token) => {
-  const client = axios.create({ baseURL: "https://baby-milk-api.azurewebsites.net/api" });
+  const client = axios.create({ baseURL: "http://localhost:5207/api" });
   client.interceptors.request.use((config) => {
     config.headers.Authorization = `Bearer ${token}`;
     config.headers["Content-Type"] = "multipart/form-data";
